@@ -1,10 +1,27 @@
 import express from "express";
+import mongoose, { ConnectOptions } from "mongoose";
+import dotenv from "dotenv";
 
 const app = express();
 
+dotenv.config();
+
 app.use(express.json());
 
-const port = 8000;
+const port = process.env.PORT;
+
+const mongoDB = process.env.DB_URL as string;
+mongoose
+  .connect(mongoDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  } as ConnectOptions)
+  .then(() => {
+    console.log("Database connected");
+  })
+  .catch((error) => {
+    console.error("Database connection failed: ", error.message);
+  });
 
 const todos = [
   {
